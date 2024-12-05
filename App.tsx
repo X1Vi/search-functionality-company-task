@@ -1,118 +1,66 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, { useState } from 'react';
+import { View, Text, TextInput } from 'react-native';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+const App = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const blogPosts = [
+    { title: 'React Native Basics', description: 'Learn the basics of React Native in this comprehensive guide.' },
+    { title: 'Advanced React Native', description: 'Explore advanced techniques for building mobile apps.' },
+    { title: 'Styling Tips', description: 'Best practices for styling React Native components.' },
+    { title: 'State Management', description: 'An overview of state management solutions for React Native.' },
+    { title: 'Optimizing Performance', description: 'Improve the performance of your React Native apps.' },
+  ];
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  const filteredPosts = blogPosts.filter((post) =>
+    post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    post.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <View style={{ flex: 1, padding: 20, backgroundColor: '#f9f9f9' }}>
+      <TextInput
+        style={{
+          height: 40,
+          borderColor: '#ddd',
+          borderWidth: 1,
+          borderRadius: 5,
+          paddingHorizontal: 10,
+          marginBottom: 20,
+          backgroundColor: '#fff',
+        }}
+        placeholder="Search blog posts..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+      />
+      {filteredPosts.length > 0 ? (
+        filteredPosts.map((post, index) => (
+          <View
+            key={index}
+            style={{
+              marginBottom: 15,
+              padding: 15,
+              backgroundColor: '#fff',
+              borderRadius: 5,
+              shadowColor: '#000',
+              shadowOpacity: 0.1,
+              shadowOffset: { width: 0, height: 2 },
+              shadowRadius: 4,
+              elevation: 2,
+            }}
+          >
+            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 5 }}>
+              {post.title}
+            </Text>
+            <Text style={{ fontSize: 14, color: '#555' }}>{post.description}</Text>
+          </View>
+        ))
+      ) : (
+        <Text style={{ fontSize: 16, color: '#999', textAlign: 'center', marginTop: 20 }}>
+          No blog posts found
+        </Text>
+      )}
     </View>
   );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+};
 
 export default App;
